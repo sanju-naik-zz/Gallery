@@ -12,6 +12,7 @@ class GalleryViewController: UIViewController {
     
     @IBOutlet weak var imagesCollectionView: UICollectionView!
     var imagePickerController: UIImagePickerController?
+    var refreshControl: UIRefreshControl?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +22,7 @@ class GalleryViewController: UIViewController {
         
         title = "Gallery"
         
-        // addRefreshControl()
+        addRefreshControl()
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,15 +31,19 @@ class GalleryViewController: UIViewController {
     }
     
     func addRefreshControl() {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        imagesCollectionView.addSubview(refreshControl)
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        if let control = refreshControl {
+            imagesCollectionView.addSubview(control)
+        }
         imagesCollectionView.alwaysBounceVertical = true
 
     }
     
     func refresh() {
         imagesCollectionView.reloadData()
+        refreshControl?.endRefreshing()
+
     }
 }
 
